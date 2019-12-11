@@ -21,18 +21,27 @@ data = data.dropna()
 
 #drop rows with the hetnai category by applying a boolean mask over the dataframe
 data = data[data.genre.apply(lambda x: 'hentai' not in x.lower())]
+data = data[data.genre.apply(lambda x: 'movie' not in x.lower())]
+data = data[data.episodes != "Unknown"]
+data.episodes = data.episodes.astype(int)
 
-print(data["genre"])
+print(data["episodes"])
 print(data.dtypes)
 
 members = []
 ratings = []
+episodes = []
 
 for index, row in data.iterrows():
-	if row["members"] > 50000000:
+	if row["members"] > 5000000:
+		continue
+	if np.isnan(row["episodes"]) or row["episodes"] < 1:
+		continue
+	if row["episodes"] > 500:
 		continue
 	members.append(row["members"])
 	ratings.append(row["rating"])
+	episodes.append(int(row["episodes"]))
 
 plt.figure(num=1, figsize=(20,10))
 plt.title("Anime Ratings vs Members")
@@ -40,7 +49,7 @@ plt.scatter(members, ratings)
 plt.xlabel("Members")
 plt.ylabel("Ratings")
 
-
+npepisodes = np.array(episodes)
 npmembers = np.array(members)
 npratings = np.array(ratings)
 
@@ -66,6 +75,10 @@ plt.hist(h, bins='auto')
 plt.xlabel("Members")
 
 
+
+
+
+
 #Local weighted regression
 plt.figure(num=3, figsize=(20,10))
 plt.title("Locally Weighted Regression for Anime Ratings vs Members")
@@ -83,6 +96,8 @@ plt.plot(lowx, lowy, "*")
 plt.xlabel("Members")
 plt.ylabel("Ratings")
 
+
+
 plt.figure(4)
 plt.title("Members per Anime")
 plt.ylabel("Members")
@@ -96,6 +111,25 @@ plt.ylabel("Rating")
 rdata = pd.DataFrame(npratings, columns=["rating"])
 ratingsboxplot = rdata.boxplot(column = ["rating"])
 plt.xlabel("Animes")
+
+
+
+
+#Lowess for Episodes
+plt.figure(num=6, figsize=(20,10))
+plt.title("Locally Weighted Regression for Anime Ratings vs Episodes")
+lowessep = sm.nonparametric.lowess(npratings, npepisodes, frac=.5)
+
+lowxep = list(zip(*lowessep))[0]
+lowyep = list(zip(*lowessep))[1]
+
+inter = interp1d(lowxep, lowyep, bounds_error=False)
+
+plt.plot(npepisodes, npratings, "o")
+plt.plot(lowx, lowy, "*")
+plt.xlabel("Episodes")
+plt.ylabel("Ratings")
+
 
 
 plt.show()

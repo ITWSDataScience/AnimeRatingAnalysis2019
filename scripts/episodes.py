@@ -109,6 +109,7 @@ plt.yticks(np.arange(min(avgRatingsArr), max(avgRatingsArr), 1))
 plt.show()
 
 
+##########################################################################################################################
 
 episodesCounts = {}
 totalRatings = {}
@@ -190,9 +191,76 @@ for i in totalRatings.keys():
 	numEpisodesArr.append(i)
 	avgRatingsArr.append(totalRatings[i]/episodesCounts[i])
 
+bucketEpisodeArr = []
+bucketAvgRatingArr = []
+
+newAvg = 0
+newCount = 0
+
+for i in range(300):
+
+	if i in totalRatings.keys():
+		toAdd = totalRatings[i]/episodesCounts[i]
+	else:
+		#continue
+		if i % 10 == 0:
+			newAvg = newAvg/10
+
+			bucketAvgRatingArr.append(newAvg)
+			bucketEpisodeArr.append(i-5)
+
+			newAvg = 0
+			newCount = 0
+			continue
+
+	newAvg += toAdd
+	newCount += 1
+
+	if i % 10 == 0:
+		newAvg = newAvg/10
+
+		bucketAvgRatingArr.append(newAvg)
+		bucketEpisodeArr.append(i-5)
+
+		newAvg = 0
+		newCount = 0
+	
+	'''
+	newAvg += numEpisodesArr[i]
+	newAvg += numEpisodesArr[i+1]
+	newAvg += numEpisodesArr[i+2]
+	newAvg += numEpisodesArr[i+3]
+	newAvg += numEpisodesArr[i+4]
+	newAvg += numEpisodesArr[i+5]
+	newAvg += numEpisodesArr[i+6]
+	newAvg += numEpisodesArr[i+7]
+	newAvg += numEpisodesArr[i+8]
+	newAvg += numEpisodesArr[i+9]
+	
+
+	newAvg = newAvg/10
+
+	bucketAvgRatingArr.append(newAvg)
+	bucketEpisodeArr.append(i)
+	'''
+
+newAvg = newAvg/newCount
+
+bucketAvgRatingArr.append(newAvg)
+bucketEpisodeArr.append(len(numEpisodesArr) - newCount)
+
+print(bucketAvgRatingArr)
+
+newAvg = 0
+newCount = 0
+
 figure(figsize=(12, 6))
 
-plt.bar(numEpisodesArr, avgRatingsArr)
+plt.bar(bucketEpisodeArr, bucketAvgRatingArr, width=(.8*12))
+
+numBins = int(len(numEpisodesArr)/10)
+
+#plt.hist(bucketAvgRatingArr, bins=numBins)
 #plt.scatter(numEpisodesArr, avgRatingsArr, 3, c="b")
 
 print(max(numEpisodesArr))
@@ -208,8 +276,8 @@ plt.ylabel("Average Rating")
 #plt.xticks([])
 #plt.yticks([])
 
-plt.xticks(np.arange(min(numEpisodesArr),max(numEpisodesArr),25))
-plt.yticks(np.arange(min(avgRatingsArr), max(avgRatingsArr), 1))
+#plt.xticks(np.arange(min(numEpisodesArr),max(numEpisodesArr),25))
+plt.yticks(np.arange(min(bucketAvgRatingArr), max(bucketAvgRatingArr), 1))
 
 #figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
 

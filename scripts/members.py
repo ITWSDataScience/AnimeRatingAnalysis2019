@@ -29,7 +29,7 @@ members = []
 ratings = []
 
 for index, row in data.iterrows():
-	if row["members"] > 1000000:
+	if row["members"] > 50000000:
 		continue
 	members.append(row["members"])
 	ratings.append(row["rating"])
@@ -60,12 +60,15 @@ print(slope)
 ##Histogram of data 
 plt.figure(num=2, figsize=(20,10))
 h = np.hstack(npmembers)
+plt.title("Amount of Members per Anime")
+plt.ylabel("Number of Animes")
 plt.hist(h, bins='auto')
 plt.xlabel("Members")
 
 
 #Local weighted regression
 plt.figure(num=3, figsize=(20,10))
+plt.title("Locally Weighted Regression for Anime Ratings vs Members")
 lowess = sm.nonparametric.lowess(npratings, npmembers, frac=.3)
 
 lowx = list(zip(*lowess))[0]
@@ -81,12 +84,18 @@ plt.xlabel("Members")
 plt.ylabel("Ratings")
 
 plt.figure(4)
+plt.title("Members per Anime")
+plt.ylabel("Members")
 mdata = pd.DataFrame(npmembers, columns=["members"])
 membersboxplot = mdata.boxplot(column = ["members"])
+plt.xlabel("Animes")
 
 plt.figure(5)
+plt.title("Ratings per Anime")
+plt.ylabel("Rating")
 rdata = pd.DataFrame(npratings, columns=["rating"])
 ratingsboxplot = rdata.boxplot(column = ["rating"])
+plt.xlabel("Animes")
 
 
 plt.show()

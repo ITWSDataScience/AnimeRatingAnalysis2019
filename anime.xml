@@ -1,0 +1,17 @@
+<metadata>
+	<contributor>John Gay, Andrew Leaf, Steven Li, Yuze Ma</contributor>
+	<coverage>MyAnimeList.net</coverage>
+	<creator>Data Science F2019 Team 2</creator>
+	<date>2019-11-07</date>
+	<description>Information from MyAnimeList.net with information about the name, genre, type, episodes, ratings, and members for each anime.</description>
+	<format>text/csv</format>
+	<identifier>https://github.com/ITWSDataScience/AnimeRatingAnalysis2019/blob/master/anime.csv</identifier>
+	<language>en-US</language>
+	<publisher>Data Science F2019 Team 2</publisher>
+	<relation>Anime</relation>
+	<rights>Public Domain.</rights>
+	<source>https://myanimelist.net/</source>
+	<subject>Anime Names, Genres, Types, Episodes, Ratings, and Members</subject>
+	<title>anime.csv</title>
+	<type>Table</type>
+</metadata>
